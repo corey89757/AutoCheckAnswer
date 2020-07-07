@@ -50,24 +50,28 @@ public class AutoCheckAnswer {
                 while (stdAnswerIndex < standardAnswers.size() && stuAnswerIndex < studentAnswers.size()) {
                     String curAnswer = studentAnswers.get(stuAnswerIndex);
                     StandardAnswer answer = standardAnswers.get(stdAnswerIndex);
-
                     //fix answer "，"->","
                     answer.setAnswer(answer.getAnswer().replaceAll("，", ","));
 
-                    if (isContainChinese(answer.getAnswer())) {
-                        if (curAnswer.contains(answer.getAnswer())) {
-                            total += answer.getScore();
+                    if (answer.getAnswer().contains("/")) {
+                        String[] answers = answer.getAnswer().split("/");
+                        for (String s : answers) {
+                            if (curAnswer.contains(s)) {
+                                total += answer.getScore();
+                                break;
+                            }
                         }
                     } else {
-                        if (answer.getAnswer().contains("/")) {
-                            total += answer.getScore();
+                        if (isContainChinese(answer.getAnswer())) {
+                            if (curAnswer.contains(answer.getAnswer())) {
+                                total += answer.getScore();
+                            }
                         } else {
                             if (answer.getAnswer().equalsIgnoreCase(curAnswer)) {
                                 total += answer.getScore();
                             }
                         }
                     }
-
                     stdAnswerIndex++;
                     stuAnswerIndex++;
                 }
